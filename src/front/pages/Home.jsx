@@ -54,7 +54,10 @@ export const Home = () => {
 			<label>username</label>
 					<input					
 						type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" 
-						onChange={(e) => setUsuarioNuevo({ ...usuarioNuevo, email: e.target.value })}
+						onChange={(e) => {							
+							console.log(e.target.value)
+							setUsuarioNuevo({ ...usuarioNuevo, email: newEmail });
+						  }}
 						value={usuarioNuevo.email}
 					/>
 					<label>password</label>
@@ -62,7 +65,7 @@ export const Home = () => {
 					<input type="text" className="form-control" placeholder="password" aria-label="Username" aria-describedby="basic-addon1" 
 						onChange={(e) => {
 							setUsuarioNuevo({ ...usuarioNuevo, password: e.target.value }) 
-							
+							console.log(e.target.value)
 						}}
 						value={usuarioNuevo.password}
 					/>
