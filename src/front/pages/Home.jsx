@@ -1,10 +1,24 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import React, { useEffect, useState } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { createUser } from "../services/createUser.js";
 
 export const Home = () => {
 
 	const { store, dispatch } = useGlobalReducer()
+
+	const [usuarioNuevo, setUsuarioNuevo] = useState({
+		email:"",
+		password:""
+	})
+
+	const handleCrearUsuario = async (e)=> {
+		e.preventdefault();
+		try{
+			await createUser(usuarioNuevo)
+		} catch(error){
+			console.log("hubo un error al crear el User:", error)
+		}
+	}
 
 	const loadMessage = async () => {
 		try {
@@ -33,14 +47,25 @@ export const Home = () => {
 	}, [])
 
 	return (
-		<div className="text-center mt-5">
-			<form className="">
+		<div className="text-center mt-5 bg-light content-fluid p-5">
+			<form className=""
+			onSubmit={handleCrearUsuario}
+			>
 			<label>username</label>
-					<input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
-			
+					<input					
+						type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" 
+						onChange={(e) => setUsuarioNuevo({ ...usuarioNuevo, email: e.target.value })}
+						value={usuarioNuevo.email}
+					/>
 					<label>password</label>
 				
-					<input type="text" className="form-control" placeholder="password" aria-label="Username" aria-describedby="basic-addon1" />
+					<input type="text" className="form-control" placeholder="password" aria-label="Username" aria-describedby="basic-addon1" 
+						onChange={(e) => {
+							setUsuarioNuevo({ ...usuarioNuevo, password: e.target.value }) 
+							
+						}}
+						value={usuarioNuevo.password}
+					/>
 		
 			</form>
 		</div>
