@@ -1,6 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import secrets
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
@@ -12,10 +13,16 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 CORS(app)
 
+#configuracion de JWT
+secret_key = secrets.token_hex(32)
+
+app.config["JWT_SECRET_KEY"] = secret_key
+jwt = JWTManager(app)
 
 
 
@@ -97,6 +104,17 @@ def add_new_user():
     db.session.add(user)
     db.session.commit()
     return jsonify(user.serialize()),201
+
+@app.route("/login", methods=["POST"])
+def login():
+    
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    if email != "test" or password != "test":
+        return jsonify({"msg": "Bad username or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
