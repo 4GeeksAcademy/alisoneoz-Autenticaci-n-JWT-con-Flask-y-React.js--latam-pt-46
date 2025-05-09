@@ -15,7 +15,7 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
-app = Flask(__name__)
+app = Flask(__name__) 
 CORS(app)
 
 #configuracion de JWT
@@ -31,7 +31,6 @@ jwt = JWTManager(app)
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
 static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
-app = Flask(__name__)
 app.url_map.strict_slashes = False
 bcrypt = Bcrypt(app)
 # database condiguration
@@ -107,14 +106,30 @@ def add_new_user():
 
 @app.route("/login", methods=["POST"])
 def login():
-    
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-    if email != "test" or password != "test":
-        return jsonify({"msg": "Bad username or password"}), 401
+    
+    if not email or not password:
+        return jsonify({"msg": "Email and password are required"}), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if user is None:
+        return jsonify({"msg": "User not found"}), 404
+
+    if not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"msg": "Incorrect password"}), 401
 
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
+
+@app.route("/protected", methods=["GET"])
+@jwt_required()  
+def pagina_protegida_por_inicio_de_sesion():
+   
+    current_user = get_jwt_identity()
+    
+    return jsonify(logged_in_as=current_user), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
