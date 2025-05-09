@@ -12,7 +12,7 @@ export const Home = () => {
 	})
 
 	const handleCrearUsuario = async (e)=> {
-		e.preventdefault();
+		e.preventDefault();
 		try{
 			await createUser(usuarioNuevo)
 		} catch(error){
