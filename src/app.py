@@ -85,11 +85,11 @@ def add_new_user():
             "message":"password is required"
         }),400   
     #que el user sea nuevo
-    user_existente = db.session.execute(db.select(User).filter_by(email=body["email"])).one_or_none()
-    if user_existente is not None:
-        return jsonify({
-            "message":"no se puede crear el usuarioo"
-        }),400 
+    # user_existente = db.session.execute(db.select(User).filter_by(email=body["email"])).one_or_none()
+    # if user_existente is not None:
+    #     return jsonify({
+    #         "message":"no se puede crear el usuarioo"
+    #     }),400 
 
     email=body["email"]
     password = body.get("password")

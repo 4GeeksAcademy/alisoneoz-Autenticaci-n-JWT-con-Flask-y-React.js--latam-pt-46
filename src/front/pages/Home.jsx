@@ -51,12 +51,12 @@ export const Home = () => {
 			<form className=""
 			onSubmit={handleCrearUsuario}
 			>
-			<label>username</label>
+			<label>Email</label>
 					<input					
-						type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" 
+						type="text" className="form-control" placeholder="youremail@companyofyouremail.com" aria-label="Username" aria-describedby="basic-addon1" 
 						onChange={(e) => {							
 							console.log(e.target.value)
-							setUsuarioNuevo({ ...usuarioNuevo, email: newEmail });
+							setUsuarioNuevo({ ...usuarioNuevo, email: e.target.value });
 						  }}
 						value={usuarioNuevo.email}
 					/>
@@ -69,7 +69,7 @@ export const Home = () => {
 						}}
 						value={usuarioNuevo.password}
 					/>
-		
+		<button className="btn btn-success">Send</button>
 			</form>
 		</div>
 	);
