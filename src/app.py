@@ -1,7 +1,7 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-import secrets
+
 import os
 from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
@@ -19,9 +19,9 @@ app = Flask(__name__)
 CORS(app)
 
 #configuracion de JWT
-secret_key = secrets.token_hex(32)
 
-app.config["JWT_SECRET_KEY"] = secret_key
+
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")
 jwt = JWTManager(app)
 
 
@@ -106,30 +106,32 @@ def add_new_user():
 
 @app.route("/login", methods=["POST"])
 def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
+    body=request.get_json() #chequear si llego algo en body
+    if not body:
+        return jsonify({"msg": "Body es required"}), 400
+    
+    email = body.get("email", None)
+    password = body.get("password", None)
     
     if not email or not password:
         return jsonify({"msg": "Email and password are required"}), 400
 
     user = User.query.filter_by(email=email).first()
 
-    if user is None:
-        return jsonify({"msg": "User not found"}), 404
+    if user is None or not bcrypt.check_password_hash(user.password, password):
+        return jsonify({"msg": "Invalid credentials"}), 400
 
-    if not bcrypt.check_password_hash(user.password, password):
-        return jsonify({"msg": "Incorrect password"}), 401
+    access_token = create_access_token(identity=email) #dato que sea unico, pudiera ser el id
 
-    access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
+    return jsonify({"access_token":access_token, "user":user.serialize()})
 
 @app.route("/protected", methods=["GET"])
 @jwt_required()  
 def pagina_protegida_por_inicio_de_sesion():
    
-    current_user = get_jwt_identity()
+    current_user_email = get_jwt_identity()
     
-    return jsonify(logged_in_as=current_user), 200
+    return jsonify(logged_in_as=current_user_email), 200
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

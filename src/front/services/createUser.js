@@ -1,4 +1,4 @@
-const BASE_URL="https://urban-robot-vj66vvr9wr92xrvv-3001.app.github.dev/signup"
+const BASE_URL="https://effective-space-chainsaw-9g77995rw4rfprpg-3001.app.github.dev/signup"
 
 export const createUser = async (user) => {
   try {

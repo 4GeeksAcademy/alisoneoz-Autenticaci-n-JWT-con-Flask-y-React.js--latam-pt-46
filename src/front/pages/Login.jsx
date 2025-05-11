@@ -1,8 +1,14 @@
 // src/front/pages/Login.jsx
 import React, { useState } from "react";
 import { loginUser } from "../services/loginUser";
+import { useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Login = () => {
+    const { dispatch } = useGlobalReducer()
+
+    const navigate = useNavigate();
+
     const [userCredentials, setUserCredentials] = useState({
         email: "",
         password: ""
@@ -12,7 +18,15 @@ export const Login = () => {
         e.preventDefault();
         try {
             const token = await loginUser(userCredentials.email, userCredentials.password);
+            localStorage.setItem('accessToken', token);
+            dispatch({
+                type: "guardar_el_token",
+                payload: { token: token }
+            })
             console.log("Token guardado en Local Storage:", token);
+            token ?  navigate("/protected") : alert("no se pudo iniciar sesion")
+            
+
         } catch (error) {
             console.log("Hubo un error al iniciar sesión:", error);
         }

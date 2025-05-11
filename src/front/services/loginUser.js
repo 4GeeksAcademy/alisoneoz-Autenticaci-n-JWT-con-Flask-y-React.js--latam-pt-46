@@ -1,4 +1,4 @@
-const BASE_URL="https://urban-robot-vj66vvr9wr92xrvv-3001.app.github.dev/login"
+const BASE_URL="https://effective-space-chainsaw-9g77995rw4rfprpg-3001.app.github.dev/login"
 
 export async function loginUser(email, password) {
   const response = await fetch(BASE_URL, {
@@ -14,7 +14,8 @@ export async function loginUser(email, password) {
   }
 
   const data = await response.json();
-  localStorage.setItem('accessToken', data.access_token);
+  
+  
   return data.access_token;
 }
 

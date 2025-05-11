@@ -1,5 +1,6 @@
 export const initialStore=()=>{
   return{
+    token: localStorage.getItem('accessToken'),
     message: null,
     todos: [
       {
@@ -18,6 +19,11 @@ export const initialStore=()=>{
 
 export default function storeReducer(store, action = {}) {
   switch(action.type){
+    case 'guardar_el_token':
+      return{
+        ...store, token: action.payload.token
+      }
+
     case 'set_hello':
       return {
         ...store,

@@ -1,32 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { accessProtectedRoute } from '../services/accessProtectedRoute';
+import { useNavigate, Navigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useEffect } from "react";
+
 
 const ProtectedPage = () => {
-  const [protectedData, setProtectedData] = useState(null);
-  const [error, setError] = useState(null);
+  const { store } = useGlobalReducer()
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await accessProtectedRoute();
-        setProtectedData(data.logged_in_as); 
-      } catch (err) {
-        setError(err.message);
-      }
-    };
 
-    fetchData();
-  }, []);
+
+
+
+  }, [store.token])
+
+  if (!store.token) {
+    return <Navigate to="/login"/>
+
+  }
+
 
   return (
     <div >
       <h1 >Página Protegida</h1>
-      {error && <p >{error}</p>}
-      {protectedData ? (
-        <p>Estás autenticado como: {protectedData}</p>
-      ) : (
-        <p>Cargando datos...</p>
-      )}
+
     </div>
   );
 };
