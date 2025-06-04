@@ -90,20 +90,41 @@ def add_new_user():
           return jsonify({
             "message":"email is required"
         }),400
+    
+    user = User.query.filter_by(email=body["email"]).first()
+ 
+    if user is not None:
+        return jsonify({
+            "message":"Invalid credential"
+        }),400 
+      
     if "password" not in body:
         return jsonify({
             "message":"password is required"
         }),400   
+
+    if len(body["password"]) < 6:
+        return jsonify({
+            "message":"password must be at least 6 character"
+        }),400  
+    
     email=body["email"]
     password = body.get("password")
     is_active = body.get("is_active", True)
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     user= User(email=email, password=hashed_password, is_active=is_active)
-    db.session.add(user)
-    db.session.commit()
-    return jsonify(user.serialize()),201
 
+    try:
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({"message": "User was succesfully created"}),201 
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "Error while creating the user", "error":str(e)}),500
+    finally:
+        db.session.close()  
+    
 @app.route("/login", methods=["POST"])
 def login():
     body=request.get_json() #chequear si llego algo en body
