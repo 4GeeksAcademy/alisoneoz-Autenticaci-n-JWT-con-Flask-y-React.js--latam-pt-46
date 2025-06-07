@@ -1,8 +1,8 @@
-const BASE_URL="https://effective-space-chainsaw-9g77995rw4rfprpg-3001.app.github.dev/signup"
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const createUser = async (user) => {
   try {
-    const response = await fetch(BASE_URL, {
+    const response = await fetch(`${API_URL}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

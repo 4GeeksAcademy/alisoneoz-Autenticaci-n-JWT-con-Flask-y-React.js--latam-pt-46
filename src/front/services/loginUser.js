@@ -1,7 +1,7 @@
-const BASE_URL="https://effective-space-chainsaw-9g77995rw4rfprpg-3001.app.github.dev/login"
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export async function loginUser(email, password) {
-  const response = await fetch(BASE_URL, {
+  const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const BASE_URL = "https://urban-robot-vj66vvr9wr92xrvv-3001.app.github.dev";
+const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export async function accessProtectedRoute() {
   try {
@@ -7,7 +7,7 @@ export async function accessProtectedRoute() {
       throw new Error('No token found');
     }
 
-    const response = await fetch(`${BASE_URL}/protected`, {
+    const response = await fetch(`${API_URL}/protected`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,

@@ -154,6 +154,9 @@ def pagina_protegida_por_inicio_de_sesion():
     
     return jsonify(logged_in_as=current_user_email), 200
 
+
+    
+
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
