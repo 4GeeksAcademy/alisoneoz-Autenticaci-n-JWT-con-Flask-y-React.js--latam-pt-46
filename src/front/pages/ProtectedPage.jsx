@@ -18,12 +18,10 @@ const ProtectedPage = () => {
     return <Navigate to="/login"/>
 
   }
-
-
   return (
-    <div >
-      <h1 >Página Protegida</h1>
-
+    <div className="container-fluid mt-5 mx-auto d-flex flex-column align-items-center" >
+      <h1 className="my-5">Bienvenido a la Página Protegida</h1>
+      <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm84dXpmOWRvaGVhOTM0dzM3Y3Q2MWk2Y2d3dXVyeWhyb2M4NmtnMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BBNYBoYa5VwtO/giphy.gif" />
     </div>
   );
 };

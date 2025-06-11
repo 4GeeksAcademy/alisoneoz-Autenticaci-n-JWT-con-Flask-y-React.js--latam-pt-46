@@ -35,7 +35,9 @@ export const Login = () => {
     return (
         <div className="text-center mt-5 bg-light content-fluid p-5">
             <form onSubmit={handleLogin}>
+                <h1>Hi there! Please Login!</h1>
                 <label>Email</label>
+
                 <input
                     type="text"
                     className="form-control"
